@@ -1,0 +1,116 @@
+{
+  "site": {
+    "brandName": "Yomajo",
+    "tagline": "Manufaktur aus Bayern",
+    "heroTitle": "Handgemachte gedörrte Früchte & Zimttoasts",
+    "heroSubtitle": "Direkt aus unserer bayerischen Manufaktur. 100% naturbelassen, ohne Zusatzstoffe und schonend getrocknet.",
+    "freeShippingThreshold": 35.00,
+    "currency": "€"
+  },
+  "categories": [
+    { "id": "all", "label": "Alle Produkte" },
+    { "id": "früchte", "label": "Gedörrte Chips" },
+    { "id": "toast", "label": "Zimttoasts" }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Apfelchips",
+      "category": "früchte",
+      "price": 2.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Knusprige Bio-Apfelscheiben schonend ohne Zuckerzusatz gedörrt."
+    },
+    {
+      "id": "2",
+      "name": "Zimttoast-Klein",
+      "category": "toast",
+      "price": 1.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "3",
+      "name": "Apfelchips-Pulver",
+      "category": "früchte",
+      "price": 3.50,
+      "badge": "Bestseller",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Aromatische bayerische Zwetschgen, gedörrt und leicht mit feinstem Zimt verfeinert."
+    },
+    {
+      "id": "4",
+      "name": "Apfelchips-Soße",
+      "category": "früchte",
+      "price": 3.50,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Das perfekte Probierpaket: 2x Apfel-Chips, 1x Zimttoast, 1x Zwetschgen-Dörrobst."
+    },
+    {
+      "id": "5",
+      "name": "Apfelchips-Mix",
+      "category": "früchte",
+      "price": 4.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "6",
+      "name": "Zimttoast-Groß",
+      "category": "toast",
+      "price": 2.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "7",
+      "name": "Orangenchips",
+      "category": "früchte",
+      "price": 3.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "8",
+      "name": "Erdbeerenchips",
+      "category": "früchte",
+      "price": 3.00,
+      "badge": "Bestseller",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Aromatische bayerische Zwetschgen, gedörrt und leicht mit feinstem Zimt verfeinert."
+    },
+    {
+      "id": "9",
+      "name": "Gemischte-Chips",
+      "category": "früchte",
+      "price": 3.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Das perfekte Probierpaket: 2x Apfel-Chips, 1x Zimttoast, 1x Zwetschgen-Dörrobst."
+    },
+    {
+      "id": "10",
+      "name": "Bananenchips",
+      "category": "früchte",
+      "price": 3.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1568571780765-9276ac8b75a2?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "11",
+      "name": "Erdbeeren-Crunchy",
+      "category": "früchte",
+      "price": 1.00,
+      "badge": "Neu",
+      "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=600",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    }
+  ]
+}
