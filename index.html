@@ -35,9 +35,12 @@
     .nav-container { max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
     .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
     .tagline { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 8px; }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
     
-    .cart-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .cart-btn, .address-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .address-btn { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
     .cart-btn:hover { background: var(--accent-hover); }
+    .address-btn:hover { background: var(--tag-bg); }
 
     /* Hero */
     .hero { max-width: 1100px; margin: 2rem auto; padding: 2.5rem 1.5rem; text-align: center; }
@@ -64,16 +67,24 @@
     .add-btn { background: var(--bg); border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
     .add-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-    /* Simple Cart Modal */
-    .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.4); display: none; justify-content: flex-end; z-index: 100; }
+    /* Modals */
+    .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; }
     .modal-overlay.open { display: flex; }
+    
+    /* Cart Drawer */
+    .cart-drawer-overlay { justify-content: flex-end; }
     .cart-drawer { background: var(--card-bg); width: 100%; max-width: 400px; height: 100%; padding: 1.5rem; display: flex; flex-direction: column; }
     .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
     .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; }
     .cart-items { flex-grow: 1; overflow-y: auto; padding: 1rem 0; }
     .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #f5f5f5; padding-bottom: 0.5rem; }
     .cart-footer { border-top: 1px solid var(--border); padding-top: 1rem; }
-    .checkout-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    
+    /* Address Modal Box */
+    .address-box { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+    .address-form input { width: 100%; padding: 0.75rem; margin-top: 0.5rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
+    .address-info-display { font-size: 0.85rem; background: var(--tag-bg); padding: 0.5rem 0.8rem; border-radius: 8px; margin-bottom: 0.5rem; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -84,9 +95,12 @@
         <span class="logo" id="brandName">Yomajo</span>
         <span class="tagline" id="tagline"></span>
       </div>
-      <button class="cart-btn" onclick="toggleCart()">
-        🛒 Warenkorb (<span id="cartCount">0</span>)
-      </button>
+      <div class="nav-right">
+        <button class="address-btn" onclick="openAddressModal()">📍 Lieferadresse</button>
+        <button class="cart-btn" onclick="toggleCart()">
+          🛒 Warenkorb (<span id="cartCount">0</span>)
+        </button>
+      </div>
     </div>
   </header>
 
@@ -100,8 +114,32 @@
 
   <main class="grid" id="productGrid"></main>
 
+  <!-- Address Modal -->
+  <div class="modal-overlay" id="addressModal">
+    <div class="address-box">
+      <h2>Lieferadresse eingeben</h2>
+      <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1rem;">Bitte gib deine Adresse an, damit wir deine Bestellung liefern können.</p>
+      
+      <form class="address-form" onsubmit="saveAddress(event)">
+        <label>Vollständiger Name *</label>
+        <input type="text" id="custName" required placeholder="Max Mustermann">
+
+        <label>Straße & Hausnummer *</label>
+        <input type="text" id="custStreet" required placeholder="Musterstraße 12">
+
+        <label>Postleitzahl & Ort *</label>
+        <input type="text" id="custCity" required placeholder="80331 München">
+
+        <label>E-Mail-Adresse *</label>
+        <input type="email" id="custEmail" required placeholder="max@beispiel.de">
+
+        <button type="submit" class="save-btn">Adresse speichern</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Cart Drawer -->
-  <div class="modal-overlay" id="cartModal">
+  <div class="modal-overlay cart-drawer-overlay" id="cartModal">
     <div class="cart-drawer">
       <div class="cart-header">
         <h2>Dein Warenkorb</h2>
@@ -109,6 +147,9 @@
       </div>
       <div class="cart-items" id="cartItems"></div>
       <div class="cart-footer">
+        <div class="address-info-display" id="cartAddressDisplay">
+          Lieferung an: <i>Noch keine Adresse angegeben</i>
+        </div>
         <div style="display:flex; justify-content:space-between; font-weight:700;">
           <span>Gesamtsumme:</span>
           <span id="cartTotal">0.00 €</span>
@@ -131,9 +172,49 @@
         renderSiteDetails();
         renderCategories();
         renderProducts();
+        checkCustomerAddress();
       } catch (err) {
         console.error("Fehler beim Laden von produkte.json:", err);
       }
+    }
+
+    // Address Management with localStorage
+    function checkCustomerAddress() {
+      const savedAddress = localStorage.getItem('yomajo_customer_address');
+      if (!savedAddress) {
+        openAddressModal();
+      } else {
+        const addr = JSON.parse(savedAddress);
+        document.getElementById('custName').value = addr.name || '';
+        document.getElementById('custStreet').value = addr.street || '';
+        document.getElementById('custCity').value = addr.city || '';
+        document.getElementById('custEmail').value = addr.email || '';
+        updateAddressDisplay(addr);
+      }
+    }
+
+    function openAddressModal() {
+      document.getElementById('addressModal').classList.add('open');
+    }
+
+    function saveAddress(e) {
+      e.preventDefault();
+      const addr = {
+        name: document.getElementById('custName').value,
+        street: document.getElementById('custStreet').value,
+        city: document.getElementById('custCity').value,
+        email: document.getElementById('custEmail').value
+      };
+      localStorage.setItem('yomajo_customer_address', JSON.stringify(addr));
+      updateAddressDisplay(addr);
+      document.getElementById('addressModal').classList.remove('open');
+    }
+
+    function updateAddressDisplay(addr) {
+      document.getElementById('cartAddressDisplay').innerHTML = `
+        <strong>Lieferung an:</strong> ${addr.name}, ${addr.street}, ${addr.city} 
+        (<a href="#" onclick="openAddressModal()" style="color:var(--accent);">Ändern</a>)
+      `;
     }
 
     function renderSiteDetails() {
@@ -227,12 +308,23 @@
         return;
       }
 
+      const savedAddress = localStorage.getItem('yomajo_customer_address');
+      if (!savedAddress) {
+        alert("Bitte gib zuerst deine Lieferadresse ein.");
+        openAddressModal();
+        return;
+      }
+
+      const addr = JSON.parse(savedAddress);
+      const formattedAddress = `${addr.name}\n${addr.street}\n${addr.city}\nE-Mail: ${addr.email}`;
+
       let orderSummary = cart.map(item => `${item.qty}x ${item.name} — ${(item.price * item.qty).toFixed(2)} €`).join('\n');
       let totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0).toFixed(2) + ' ' + appData.site.currency;
 
       let templateParams = {
         order_details: orderSummary,
-        total_price: totalAmount
+        total_price: totalAmount,
+        customer_address: formattedAddress
       };
 
       emailjs.send('service_zkw0mul', 'template_mbesxlp', templateParams)
