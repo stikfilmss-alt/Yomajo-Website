@@ -221,10 +221,8 @@
   </div>
 
   <script>
-    // =========================================================================
-    // HIER DEINE GOOGLE APPS SCRIPT WEB-APP URL EINFÜGEN (endet auf /exec):
-    const GOOGLE_SHEET_URL = "DEINE_GOOGLE_WEB_APP_URL_HIER_EINFUEGEN";
-    // =========================================================================
+    // Eingetragene Google Apps Script Web-App URL
+    const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw1K3jTTH_KkXPIijcknTbDvI5SBLvy4fXnZdQB2VkjguyTBLdIKyf81OeGWmCPvpMV/exec";
 
     let appData = {};
     let cart = [];
@@ -261,7 +259,6 @@
           const updated = await syncLiveStockFromGoogle();
           if (updated) {
             renderProducts();
-            // Admin-Eingabefelder nur aktualisieren, wenn das Panel gerade geschlossen ist
             if (!document.getElementById('adminPanel').classList.contains('open')) {
               renderAdminPanel();
             }
@@ -274,7 +271,7 @@
     }
 
     async function syncLiveStockFromGoogle() {
-      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) return false;
+      if (!GOOGLE_SHEET_URL) return false;
       try {
         const res = await fetch(GOOGLE_SHEET_URL + '?t=' + Date.now());
         const stockMap = await res.json();
@@ -475,7 +472,7 @@
         }
       });
 
-      if (GOOGLE_SHEET_URL && !GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) {
+      if (GOOGLE_SHEET_URL) {
         try {
           await fetch(GOOGLE_SHEET_URL, {
             method: 'POST',
@@ -622,7 +619,6 @@
         return;
       }
 
-      // Lokal abziehen für sofortige Anzeige
       const boughtItems = cart.map(item => ({ id: item.id, qty: item.qty }));
       cart.forEach(cartItem => {
         const prod = appData.products.find(p => p.id === cartItem.id);
@@ -631,8 +627,7 @@
         }
       });
 
-      // An Google Sheets senden, damit sich der Bestand für alle Kunden reduziert
-      if (GOOGLE_SHEET_URL && !GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) {
+      if (GOOGLE_SHEET_URL) {
         fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
           mode: 'no-cors',
