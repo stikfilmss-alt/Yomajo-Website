@@ -38,7 +38,7 @@
       "price": 3.50,
       "badge": "Bestseller",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
-      "description": "Aromatische bayerische Zwetschgen, gedörrt und leicht mit feinstem Zimt verfeinert."
+      "description": "Apfelchips mit Chili Pulver."
     },
     {
       "id": "4",
@@ -47,7 +47,7 @@
       "price": 3.50,
       "badge": "Neu",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
-      "description": "Das perfekte Probierpaket: 2x Apfel-Chips, 1x Zimttoast, 1x Zwetschgen-Dörrobst."
+      "description": "Apfelchips mit Chili Soße."
     },
     {
       "id": "5",
@@ -56,7 +56,7 @@
       "price": 4.00,
       "badge": "Neu",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "description": "Apfelchips mit Chili pulver und Soße."
     },
     {
       "id": "6",
@@ -65,7 +65,7 @@
       "price": 2.00,
       "badge": "Neu",
       "image": "https://cdn.gutekueche.ch/media/recipe/31472/conv/zimttoast-default.jpg",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Zimt und leichtem Rohrzucker überzogen."
     },
     {
       "id": "7",
@@ -74,7 +74,7 @@
       "price": 3.00,
       "badge": "Neu",
       "image": "https://cocktail-society.de/wp-content/uploads/2022/12/Dried-Orange-slices-2-768x768.jpg",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "description": "Richtig sauere Orangen scheiben."
     },
     {
       "id": "8",
@@ -83,7 +83,7 @@
       "price": 3.00,
       "badge": "Bestseller",
       "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
-      "description": "Aromatische bayerische Zwetschgen, gedörrt und leicht mit feinstem Zimt verfeinert."
+      "description": "Gedörrte normale Erdbeeren."
     },
     {
       "id": "9",
@@ -92,7 +92,7 @@
       "price": 3.00,
       "badge": "Neu",
       "image": "https://tse2.mm.bing.net/th/id/OIP.Xxs7tTrzhbYIV9lK90JmdQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      "description": "Das perfekte Probierpaket: 2x Apfel-Chips, 1x Zimttoast, 1x Zwetschgen-Dörrobst."
+      "description": "Das perfekte produkt für die, die Alles probieren wollen."
     },
     {
       "id": "10",
@@ -101,7 +101,7 @@
       "price": 3.00,
       "badge": "Neu",
       "image": "https://tse4.mm.bing.net/th/id/OIP.5b9XT2uwj8d6-_Ov5wkyfgHaEg?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "description": "Leckere Gedörrte Bananen."
     },
     {
       "id": "11",
@@ -110,7 +110,7 @@
       "price": 1.00,
       "badge": "Neu",
       "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "description": "Knusprige und Süße Erdbeeren."
     },
     {
       "id": "12",
@@ -119,8 +119,8 @@
       "price": 1.00,
       "badge": "Limitiert",
       "expiresAt": "2026-11-19",
-      "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
-      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+      "image": "https://m.media-amazon.com/images/I/61c5dt7e8fL._SL1100_.jpg",
+      "description": "Saure Gedörrte Kiwi Chips für den geburtstags feier von Chef."
     }
   ]
 }
