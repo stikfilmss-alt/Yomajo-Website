@@ -6,6 +6,13 @@
     "heroSubtitle": "Direkt aus unserer bayerischen Manufaktur. 100% naturbelassen, ohne Zusatzstoffe und schonend getrocknet.",
     "freeShippingThreshold": 35.00,
     "currency": "€"
+ },
+  "discounts": {
+    "YOMAJO12": 10,
+    "MAXI122026": 20,
+    "HAPPYBIRTHDAY2026": 30,
+    "6512HDAGG744Hdahu": 50
+  },
   },
   "categories": [
     { "id": "all", "label": "Alle Produkte" },
