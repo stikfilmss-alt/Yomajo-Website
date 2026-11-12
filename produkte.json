@@ -111,6 +111,16 @@
       "badge": "Neu",
       "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
       "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
+    },
+    {
+      "id": "12",
+      "name": "Geburtstags-Kiwi",
+      "category": "früchte",
+      "price": 1.00,
+      "badge": "Limitiert",
+      "expiresAt": "2026-11-19",
+      "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
+      "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
     }
   ]
 }
