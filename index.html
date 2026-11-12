@@ -194,18 +194,19 @@
     let appData = {};
     let cart = [];
     let currentCategory = 'all';
-    let appliedDiscount = null; // { code: "YOMAJO10", percent: 10 }
+    let appliedDiscount = null;
 
-    // Fallback-Gutscheine, falls in produkte.json noch keine eingetragen sind
     const defaultCoupons = {
-      "YOMAJO10": 10,
-      "WILLKOMMEN": 15
+      "YOMAJO12": 10,
+      "MAXI122026": 20,
+      "HAPPYBIRTHDAY2026": 30,
+      "6512HDAGG744HDAHU": 50
     };
 
-    // Load JSON configuration
+    // Load JSON configuration without browser cache
     async function loadShopData() {
       try {
-        const res = await fetch('produkte.json');
+        const res = await fetch('produkte.json?t=' + Date.now());
         appData = await res.json();
         renderSiteDetails();
         renderCategories();
@@ -216,7 +217,6 @@
       }
     }
 
-    // Address Management with localStorage
     function checkCustomerAddress() {
       const savedAddress = localStorage.getItem('yomajo_customer_address');
       if (!savedAddress) {
@@ -354,18 +354,20 @@
       updateCartUI();
     }
 
-    // Gutschein aus produkte.json (oder Fallback) prüfen
     function applyDiscount() {
       const code = document.getElementById('discountInput').value.trim().toUpperCase();
       const msgEl = document.getElementById('discountMsg');
 
       if (!code) return;
 
-      // Nutzt "discounts" aus produkte.json, falls vorhanden
-      const coupons = appData.discounts || defaultCoupons;
+      const rawCoupons = appData.discounts || defaultCoupons;
+      const normalizedCoupons = {};
+      for (const key in rawCoupons) {
+        normalizedCoupons[key.trim().toUpperCase()] = Number(rawCoupons[key]);
+      }
 
-      if (coupons[code] !== undefined) {
-        const percentValue = Number(coupons[code]);
+      if (normalizedCoupons[code] !== undefined && !isNaN(normalizedCoupons[code])) {
+        const percentValue = normalizedCoupons[code];
         appliedDiscount = { code: code, percent: percentValue };
         msgEl.textContent = `✓ Gutschein "${code}" (${percentValue}% Rabatt) angewendet!`;
         msgEl.className = "discount-msg success";
