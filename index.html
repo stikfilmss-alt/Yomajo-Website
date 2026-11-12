@@ -33,19 +33,19 @@
 
     /* Header & Nav */
     header { background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
-    .nav-container { max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .nav-container { max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
     .tagline { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 8px; }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
     
-    .cart-btn, .address-btn, .admin-toggle-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
+    .cart-btn, .address-btn, .admin-toggle-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
     .address-btn { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
     .admin-toggle-btn { background: var(--text); }
     .cart-btn:hover { background: var(--accent-hover); }
     .address-btn:hover { background: var(--tag-bg); }
 
     /* Hero */
-    .hero { max-width: 1100px; margin: 2rem auto; padding: 2.5rem 1.5rem; text-align: center; }
+    .hero { max-width: 1100px; margin: 2rem auto; padding: 2rem 1.5rem; text-align: center; }
     .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
     .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 1.5rem auto; }
     .hero-badge { display: inline-block; background: var(--tag-bg); color: var(--accent); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; }
@@ -112,7 +112,7 @@
 
     .cart-footer { border-top: 1px solid var(--border); padding-top: 1rem; }
     .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; }
-    .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
+    .checkout-btn:disabled, .save-btn:disabled { background: #ccc; cursor: not-allowed; }
     
     /* Address Modal Box */
     .address-box { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
@@ -154,11 +154,11 @@
 
   <!-- Admin Panel zum Verwalten des Lagerbestands -->
   <div class="admin-panel" id="adminPanel">
-    <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Lagerbestand verwalten (Frisch gedörrt?)</h3>
-    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ändere hier die Stückzahlen und klicke auf Speichern. Die Website aktualisiert sich sofort.</p>
+    <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Live-Lagerbestand verwalten (Frisch gedörrt?)</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ändere hier die Stückzahlen und klicke auf Speichern. Alle Kunden sehen die neuen Zahlen sofort.</p>
     <div id="adminProductList"></div>
     <div class="admin-actions">
-      <button class="save-btn" onclick="saveAdminStock()">Lagerbestand speichern</button>
+      <button class="save-btn" id="adminSaveBtn" onclick="saveAdminStock()">Für alle speichern</button>
       <button class="save-btn" onclick="adminLogout()" style="background: #736965;">Abmelden</button>
     </div>
   </div>
@@ -221,6 +221,11 @@
   </div>
 
   <script>
+    // =========================================================================
+    // HIER DEINE GOOGLE APPS SCRIPT WEB-APP URL EINFÜGEN (endet auf /exec):
+    const GOOGLE_SHEET_URL = "DEINE_GOOGLE_WEB_APP_URL_HIER_EINFUEGEN";
+    // =========================================================================
+
     let appData = {};
     let cart = [];
     let currentCategory = 'all';
@@ -239,29 +244,51 @@
         const res = await fetch('produkte.json?t=' + Date.now());
         appData = await res.json();
         
-        const savedStock = localStorage.getItem('yomajo_live_stock');
-        if (savedStock) {
-          const stockMap = JSON.parse(savedStock);
-          appData.products.forEach(p => {
-            if (stockMap[p.id] !== undefined) {
-              p.stock = stockMap[p.id];
-            } else if (p.stock === undefined) {
-              p.stock = 10;
-            }
-          });
-        } else {
-          appData.products.forEach(p => {
-            if (p.stock === undefined) p.stock = 10;
-          });
-        }
+        appData.products.forEach(p => {
+          if (p.stock === undefined) p.stock = 10;
+        });
+
+        await syncLiveStockFromGoogle();
 
         renderSiteDetails();
         renderCategories();
         renderProducts();
         renderAdminPanel();
         checkCustomerAddress();
+
+        // Alle 10 Sekunden leise im Hintergrund den Live-Bestand von Google Sheets holen
+        setInterval(async () => {
+          const updated = await syncLiveStockFromGoogle();
+          if (updated) {
+            renderProducts();
+            // Admin-Eingabefelder nur aktualisieren, wenn das Panel gerade geschlossen ist
+            if (!document.getElementById('adminPanel').classList.contains('open')) {
+              renderAdminPanel();
+            }
+          }
+        }, 10000);
+
       } catch (err) {
         console.error("Fehler beim Laden von produkte.json:", err);
+      }
+    }
+
+    async function syncLiveStockFromGoogle() {
+      if (!GOOGLE_SHEET_URL || GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) return false;
+      try {
+        const res = await fetch(GOOGLE_SHEET_URL + '?t=' + Date.now());
+        const stockMap = await res.json();
+        let hasChanges = false;
+        appData.products.forEach(p => {
+          if (stockMap[p.id] !== undefined && p.stock !== Number(stockMap[p.id])) {
+            p.stock = Number(stockMap[p.id]);
+            hasChanges = true;
+          }
+        });
+        return hasChanges;
+      } catch (err) {
+        console.warn("Konnte Live-Lager nicht abrufen:", err);
+        return false;
       }
     }
 
@@ -402,11 +429,15 @@
 
         if (eingabe === adminPasswort) {
           localStorage.setItem('yomajo_admin_auth', 'true');
+          renderAdminPanel();
           panel.classList.add('open');
         } else if (eingabe !== null) {
           alert("Falsches Passwort!");
         }
       } else {
+        if (!panel.classList.contains('open')) {
+          renderAdminPanel();
+        }
         panel.classList.toggle('open');
       }
     }
@@ -430,20 +461,37 @@
       `).join('');
     }
 
-    function saveAdminStock() {
+    async function saveAdminStock() {
+      const saveBtn = document.getElementById('adminSaveBtn');
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Speichert für alle...";
+
+      const stockMap = {};
       appData.products.forEach(p => {
         const input = document.getElementById(`stock-input-${p.id}`);
         if (input) {
           p.stock = parseInt(input.value) || 0;
+          stockMap[p.id] = p.stock;
         }
       });
 
-      const stockMap = {};
-      appData.products.forEach(p => { stockMap[p.id] = p.stock; });
-      localStorage.setItem('yomajo_live_stock', JSON.stringify(stockMap));
+      if (GOOGLE_SHEET_URL && !GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) {
+        try {
+          await fetch(GOOGLE_SHEET_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: "set", stock: stockMap })
+          });
+        } catch (err) {
+          console.error("Fehler beim Speichern in Google Sheets:", err);
+        }
+      }
 
       renderProducts();
-      alert("✓ Lagerbestand erfolgreich aktualisiert!");
+      saveBtn.disabled = false;
+      saveBtn.textContent = "Für alle speichern";
+      alert("✓ Live-Lagerbestand für alle Kunden aktualisiert!");
       toggleAdminPanel();
     }
 
@@ -556,7 +604,7 @@
       document.getElementById('cartModal').classList.toggle('open');
     }
 
-    function sendOrder() {
+    async function sendOrder() {
       if (checkoutCooldown) {
         alert("Bitte warte kurz, bevor du die nächste Bestellung absendest (Spam-Schutz).");
         return;
@@ -574,6 +622,8 @@
         return;
       }
 
+      // Lokal abziehen für sofortige Anzeige
+      const boughtItems = cart.map(item => ({ id: item.id, qty: item.qty }));
       cart.forEach(cartItem => {
         const prod = appData.products.find(p => p.id === cartItem.id);
         if (prod) {
@@ -581,9 +631,15 @@
         }
       });
 
-      const stockMap = {};
-      appData.products.forEach(p => { stockMap[p.id] = p.stock; });
-      localStorage.setItem('yomajo_live_stock', JSON.stringify(stockMap));
+      // An Google Sheets senden, damit sich der Bestand für alle Kunden reduziert
+      if (GOOGLE_SHEET_URL && !GOOGLE_SHEET_URL.includes("DEINE_GOOGLE")) {
+        fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: "buy", items: boughtItems })
+        }).catch(err => console.error("Lager-Abzug Fehler:", err));
+      }
 
       const addr = JSON.parse(savedAddress);
       const formattedAddress = `${addr.name}\n${addr.street}\n${addr.city}\nE-Mail: ${addr.email}`;
