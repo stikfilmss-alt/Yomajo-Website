@@ -18,7 +18,7 @@
       "name": "Apfelchips",
       "category": "früchte",
       "price": 2.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
       "description": "Knusprige Bio-Apfelscheiben schonend ohne Zuckerzusatz gedörrt."
     },
@@ -27,7 +27,7 @@
       "name": "Zimttoast-Klein",
       "category": "toast",
       "price": 1.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://cdn.gutekueche.ch/media/recipe/31472/conv/zimttoast-default.jpg",
       "description": "Hauchdünn gebackene Toastscheiben mit feinem Ceylon-Zimt und leichtem Rohrzucker überzogen."
     },
@@ -36,7 +36,7 @@
       "name": "Apfelchips-Pulver",
       "category": "früchte",
       "price": 3.50,
-      "badge": "Bestseller",
+      "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
       "description": "Apfelchips mit Chili Pulver."
     },
@@ -45,7 +45,7 @@
       "name": "Apfelchips-Soße",
       "category": "früchte",
       "price": 3.50,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
       "description": "Apfelchips mit Chili Soße."
     },
@@ -54,7 +54,7 @@
       "name": "Apfelchips-Mix",
       "category": "früchte",
       "price": 4.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
       "description": "Apfelchips mit Chili pulver und Soße."
     },
@@ -63,7 +63,7 @@
       "name": "Zimttoast-Groß",
       "category": "toast",
       "price": 2.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://cdn.gutekueche.ch/media/recipe/31472/conv/zimttoast-default.jpg",
       "description": "Hauchdünn gebackene Toastscheiben mit feinem Zimt und leichtem Rohrzucker überzogen."
     },
@@ -79,42 +79,33 @@
     },
     {
       "id": "8",
-      "name": "Erdbeerenchips",
-      "category": "früchte",
-      "price": 3.00,
-      "badge": "Bestseller",
-      "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
-      "description": "Gedörrte normale Erdbeeren."
-    },
-    {
-      "id": "9",
       "name": "Gemischte-Chips",
       "category": "früchte",
       "price": 3.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://tse2.mm.bing.net/th/id/OIP.Xxs7tTrzhbYIV9lK90JmdQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       "description": "Das perfekte produkt für die, die Alles probieren wollen."
     },
     {
-      "id": "10",
+      "id": "9",
       "name": "Bananenchips",
       "category": "früchte",
       "price": 3.00,
-      "badge": "Neu",
+      "badge": "Hauptprodukt",
       "image": "https://tse4.mm.bing.net/th/id/OIP.5b9XT2uwj8d6-_Ov5wkyfgHaEg?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       "description": "Leckere Gedörrte Bananen."
     },
     {
-      "id": "11",
+      "id": "10",
       "name": "Erdbeeren-Crunchy",
       "category": "früchte",
       "price": 1.00,
-      "badge": "Neu",
+      "badge": "Bestseller",
       "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
       "description": "Knusprige und Süße Erdbeeren."
     },
     {
-      "id": "12",
+      "id": "11",
       "name": "Geburtstags-Kiwi",
       "category": "früchte",
       "price": 3.50,
