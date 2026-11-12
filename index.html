@@ -25,6 +25,7 @@
       --accent-hover: #A64522;
       --border: #E8E2D9;
       --tag-bg: #F0EADF;
+      --success: #4E8752;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
@@ -84,6 +85,14 @@
     .remove-item-btn { background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
     .remove-item-btn:hover { text-decoration: underline; }
 
+    /* Discount Section inside Cart */
+    .discount-section { margin: 10px 0; display: flex; gap: 6px; }
+    .discount-section input { flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; text-transform: uppercase; }
+    .discount-btn { background: var(--text); color: white; border: none; padding: 0 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+    .discount-msg { font-size: 0.8rem; margin-top: 4px; }
+    .discount-msg.success { color: var(--success); }
+    .discount-msg.error { color: #d9534f; }
+
     .cart-footer { border-top: 1px solid var(--border); padding-top: 1rem; }
     .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
     
@@ -97,9 +106,17 @@
 
   <header>
     <div class="nav-container">
-      <div>
-        <span class="logo" id="brandName">Yomajo</span>
-        <span class="tagline" id="tagline"></span>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 65 65" width="38" height="38">
+          <circle cx="32" cy="32.5" r="24" fill="#FDFBF7" stroke="#C85A32" stroke-width="4"/>
+          <path d="M32 13 L32 23 M32 42 L32 52 M12.5 32.5 L22.5 32.5 M41.5 32.5 L51.5 32.5 M18.5 19 L25.5 26 M38.5 39 L45.5 46 M45.5 19 L38.5 26 M25.5 39 L18.5 46" stroke="#C85A32" stroke-width="2.2" stroke-linecap="round" opacity="0.65"/>
+          <circle cx="32" cy="32.5" r="6" fill="#C85A32"/>
+          <path d="M34 8 C40 2, 48 4, 46 11 C42 13, 36 12, 34 8 Z" fill="#5E7A52"/>
+        </svg>
+        <div>
+          <span class="logo" id="brandName">Yomajo</span>
+          <span class="tagline" id="tagline"></span>
+        </div>
       </div>
       <div class="nav-right">
         <button class="address-btn" onclick="openAddressModal()">📍 Lieferadresse</button>
@@ -156,7 +173,15 @@
         <div class="address-info-display" id="cartAddressDisplay">
           Lieferung an: <i>Noch keine Adresse angegeben</i>
         </div>
-        <div style="display:flex; justify-content:space-between; font-weight:700;">
+
+        <!-- Rabattcode Eingabe -->
+        <div class="discount-section">
+          <input type="text" id="discountInput" placeholder="Gutscheincode">
+          <button class="discount-btn" onclick="applyDiscount()">Einlösen</button>
+        </div>
+        <div id="discountMsg" class="discount-msg"></div>
+
+        <div style="display:flex; justify-content:space-between; font-weight:700; margin-top: 8px;">
           <span>Gesamtsumme:</span>
           <span id="cartTotal">0.00 €</span>
         </div>
@@ -169,6 +194,13 @@
     let appData = {};
     let cart = [];
     let currentCategory = 'all';
+    let appliedDiscount = null; // { code: "YOMAJO10", percent: 10 }
+
+    // Fallback-Gutscheine, falls in produkte.json noch keine eingetragen sind
+    const defaultCoupons = {
+      "YOMAJO10": 10,
+      "WILLKOMMEN": 15
+    };
 
     // Load JSON configuration
     async function loadShopData() {
@@ -245,7 +277,6 @@
       renderProducts();
     }
 
-    // Format YYYY-MM-DD to DD.MM.YYYY
     function formatGermanDate(dateStr) {
       const parts = dateStr.split('-');
       if (parts.length !== 3) return dateStr;
@@ -257,7 +288,6 @@
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
-      // Filter out expired limited products
       const availableProducts = appData.products.filter(p => {
         if (!p.expiresAt) return true;
         const expDate = new Date(p.expiresAt);
@@ -265,7 +295,6 @@
         return today <= expDate;
       });
 
-      // Filter by selected category
       const filtered = currentCategory === 'all' 
         ? availableProducts 
         : availableProducts.filter(p => p.category === currentCategory);
@@ -325,12 +354,48 @@
       updateCartUI();
     }
 
+    // Gutschein aus produkte.json (oder Fallback) prüfen
+    function applyDiscount() {
+      const code = document.getElementById('discountInput').value.trim().toUpperCase();
+      const msgEl = document.getElementById('discountMsg');
+
+      if (!code) return;
+
+      // Nutzt "discounts" aus produkte.json, falls vorhanden
+      const coupons = appData.discounts || defaultCoupons;
+
+      if (coupons[code] !== undefined) {
+        const percentValue = Number(coupons[code]);
+        appliedDiscount = { code: code, percent: percentValue };
+        msgEl.textContent = `✓ Gutschein "${code}" (${percentValue}% Rabatt) angewendet!`;
+        msgEl.className = "discount-msg success";
+        updateCartUI();
+      } else {
+        appliedDiscount = null;
+        msgEl.textContent = "✗ Ungültiger Gutscheincode.";
+        msgEl.className = "discount-msg error";
+        updateCartUI();
+      }
+    }
+
     function updateCartUI() {
       const count = cart.reduce((sum, item) => sum + item.qty, 0);
-      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
       
+      let discountAmount = 0;
+      if (appliedDiscount) {
+        discountAmount = subtotal * (appliedDiscount.percent / 100);
+      }
+      
+      let total = Math.max(0, subtotal - discountAmount);
+
       document.getElementById('cartCount').textContent = count;
-      document.getElementById('cartTotal').textContent = total.toFixed(2) + ' ' + appData.site.currency;
+      
+      let totalHtml = total.toFixed(2) + ' ' + appData.site.currency;
+      if (appliedDiscount && discountAmount > 0) {
+        totalHtml = `<span style="text-decoration:line-through; font-size:0.85rem; color:var(--text-muted); margin-right:6px;">${subtotal.toFixed(2)} €</span> ${total.toFixed(2)} €`;
+      }
+      document.getElementById('cartTotal').innerHTML = totalHtml;
 
       const itemsContainer = document.getElementById('cartItems');
       if (cart.length === 0) {
@@ -373,19 +438,35 @@
       const addr = JSON.parse(savedAddress);
       const formattedAddress = `${addr.name}\n${addr.street}\n${addr.city}\nE-Mail: ${addr.email}`;
 
+      let subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      let discountAmount = 0;
+      let discountText = "Kein Rabattcode verwendet";
+      let totalLabel = "";
+
+      if (appliedDiscount) {
+        discountAmount = subtotal * (appliedDiscount.percent / 100);
+        discountText = `(Rabatt) Code: ${appliedDiscount.code} (-${appliedDiscount.percent}% / -${discountAmount.toFixed(2)} €)`;
+        totalLabel = `${Math.max(0, subtotal - discountAmount).toFixed(2)} ${appData.site.currency} (Rabatt: ${appliedDiscount.code} -${appliedDiscount.percent}%)`;
+      } else {
+        totalLabel = `${subtotal.toFixed(2)} ${appData.site.currency}`;
+      }
+
       let orderSummary = cart.map(item => `${item.qty}x ${item.name} — ${(item.price * item.qty).toFixed(2)} €`).join('\n');
-      let totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0).toFixed(2) + ' ' + appData.site.currency;
 
       let templateParams = {
         order_details: orderSummary,
-        total_price: totalAmount,
-        customer_address: formattedAddress
+        total_price: totalLabel,
+        customer_address: formattedAddress,
+        discount_info: discountText
       };
 
       emailjs.send('service_zkw0mul', 'template_mbesxlp', templateParams)
         .then(function(response) {
            alert('Vielen Dank für Ihre Bestellung! Die Bestelldetails wurden per E-Mail gesendet.');
            cart = [];
+           appliedDiscount = null;
+           document.getElementById('discountInput').value = '';
+           document.getElementById('discountMsg').textContent = '';
            updateCartUI();
            toggleCart();
         }, function(error) {
