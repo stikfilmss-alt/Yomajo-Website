@@ -38,8 +38,9 @@
     .tagline { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; margin-left: 8px; }
     .nav-right { display: flex; align-items: center; gap: 10px; }
     
-    .cart-btn, .address-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .cart-btn, .address-btn, .admin-toggle-btn { background: var(--accent); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 20px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; }
     .address-btn { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+    .admin-toggle-btn { background: var(--text); }
     .cart-btn:hover { background: var(--accent-hover); }
     .address-btn:hover { background: var(--tag-bg); }
 
@@ -49,6 +50,12 @@
     .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 1.5rem auto; }
     .hero-badge { display: inline-block; background: var(--tag-bg); color: var(--accent); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; }
 
+    /* Admin Panel */
+    .admin-panel { max-width: 800px; margin: 0 auto 2rem auto; background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 1.5rem; display: none; }
+    .admin-panel.open { display: block; }
+    .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); gap: 10px; }
+    .admin-row input { width: 80px; padding: 0.4rem; text-align: center; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; }
+
     /* Category Filter */
     .categories { display: flex; justify-content: center; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; padding: 0 1rem; }
     .cat-btn { background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 16px; font-weight: 500; cursor: pointer; transition: 0.2s; }
@@ -57,16 +64,20 @@
     /* Product Grid */
     .grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; padding: 0 1.5rem; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+    .card.sold-out { opacity: 0.7; }
     .card-img-wrap { position: relative; width: 100%; height: 200px; background: #f0f0f0; }
     .card-img { width: 100%; height: 100%; object-fit: cover; }
     .badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); color: var(--accent); padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .badge.out { background: #2C2523; color: #FFFFFF; }
+    .stock-tag { font-size: 0.8rem; color: var(--accent); font-weight: 600; margin-bottom: 0.5rem; }
     .card-body { padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1; }
     .card-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
     .card-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; flex-grow: 1; }
     .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
     .price { font-size: 1.2rem; font-weight: 800; color: var(--text); }
     .add-btn { background: var(--bg); border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
-    .add-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .add-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
+    .add-btn:disabled { background: #EAEAEA; color: #999; cursor: not-allowed; border-color: #DDD; }
 
     /* Modals */
     .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; }
@@ -95,6 +106,7 @@
 
     .cart-footer { border-top: 1px solid var(--border); padding-top: 1rem; }
     .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
     
     /* Address Modal Box */
     .address-box { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
@@ -119,7 +131,8 @@
         </div>
       </div>
       <div class="nav-right">
-        <button class="address-btn" onclick="openAddressModal()">📍 Lieferadresse</button>
+        <button class="admin-toggle-btn" onclick="toggleAdminPanel()">🛠️ Admin</button>
+        <button class="address-btn" onclick="openAddressModal()">📍 Adresse</button>
         <button class="cart-btn" onclick="toggleCart()">
           🛒 Warenkorb (<span id="cartCount">0</span>)
         </button>
@@ -132,6 +145,14 @@
     <h1 id="heroTitle">Lade Produkte...</h1>
     <p id="heroSubtitle"></p>
   </section>
+
+  <!-- Admin Panel zum Verwalten des Lagerbestands -->
+  <div class="admin-panel" id="adminPanel">
+    <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Lagerbestand verwalten (Frisch gedörrt?)</h3>
+    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ändere hier die Stückzahlen und klicke auf Speichern. Die Website aktualisiert sich sofort.</p>
+    <div id="adminProductList"></div>
+    <button class="save-btn" onclick="saveAdminStock()" style="margin-top: 1rem;">Lagerbestand speichern</button>
+  </div>
 
   <div class="categories" id="categoryContainer"></div>
 
@@ -185,7 +206,7 @@
           <span>Gesamtsumme:</span>
           <span id="cartTotal">0.00 €</span>
         </div>
-        <button class="checkout-btn" onclick="sendOrder()">Kaufen</button>
+        <button class="checkout-btn" id="checkoutBtn" onclick="sendOrder()">Kaufen</button>
       </div>
     </div>
   </div>
@@ -195,6 +216,7 @@
     let cart = [];
     let currentCategory = 'all';
     let appliedDiscount = null;
+    let checkoutCooldown = false; // Für den 30-Sekunden-Cooldown
 
     const defaultCoupons = {
       "YOMAJO12": 10,
@@ -203,14 +225,33 @@
       "6512HDAGG744HDAHU": 50
     };
 
-    // Load JSON configuration without browser cache
     async function loadShopData() {
       try {
         const res = await fetch('produkte.json?t=' + Date.now());
         appData = await res.json();
+        
+        // Lagerbestände mit lokalem Speicher abgleichen (falls du sie per Admin geändert hast)
+        const savedStock = localStorage.getItem('yomajo_live_stock');
+        if (savedStock) {
+          const stockMap = JSON.parse(savedStock);
+          appData.products.forEach(p => {
+            if (stockMap[p.id] !== undefined) {
+              p.stock = stockMap[p.id];
+            } else if (p.stock === undefined) {
+              p.stock = 10; // Standardwert wenn kein stock definiert war
+            }
+          });
+        } else {
+          // Standardwerte zuweisen falls nicht in JSON
+          appData.products.forEach(p => {
+            if (p.stock === undefined) p.stock = 10;
+          });
+        }
+
         renderSiteDetails();
         renderCategories();
         renderProducts();
+        renderAdminPanel();
         checkCustomerAddress();
       } catch (err) {
         console.error("Fehler beim Laden von produkte.json:", err);
@@ -300,26 +341,38 @@
         : availableProducts.filter(p => p.category === currentCategory);
 
       grid.innerHTML = filtered.map(p => {
+        const isSoldOut = p.stock <= 0;
+
         let badgeHtml = '';
-        if (p.expiresAt) {
+        if (isSoldOut) {
+          badgeHtml = `<span class="badge out">Ausverkauft</span>`;
+        } else if (p.expiresAt) {
           const formattedDate = formatGermanDate(p.expiresAt);
           badgeHtml = `<span class="badge">Limitiert (bis ${formattedDate})</span>`;
         } else if (p.badge) {
           badgeHtml = `<span class="badge">${p.badge}</span>`;
         }
 
+        let stockInfoHtml = '';
+        if (!isSoldOut && p.stock <= 5) {
+          stockInfoHtml = `<div class="stock-tag">Nur noch ${p.stock} Stück verfügbar</div>`;
+        }
+
         return `
-          <div class="card">
+          <div class="card ${isSoldOut ? 'sold-out' : ''}">
             <div class="card-img-wrap">
               <img src="${p.image}" alt="${p.name}" class="card-img" />
               ${badgeHtml}
             </div>
             <div class="card-body">
               <h3 class="card-title">${p.name}</h3>
+              ${stockInfoHtml}
               <p class="card-desc">${p.description}</p>
               <div class="card-footer">
                 <span class="price">${p.price.toFixed(2)} ${appData.site.currency}</span>
-                <button class="add-btn" onclick="addToCart('${p.id}')">+ Hinzufügen</button>
+                <button class="add-btn" onclick="addToCart('${p.id}')" ${isSoldOut ? 'disabled' : ''}>
+                  ${isSoldOut ? 'Ausverkauft' : '+ Hinzufügen'}
+                </button>
               </div>
             </div>
           </div>
@@ -327,9 +380,52 @@
       }).join('');
     }
 
+    // Admin Panel Steuerung
+    function toggleAdminPanel() {
+      document.getElementById('adminPanel').classList.toggle('open');
+    }
+
+    function renderAdminPanel() {
+      const container = document.getElementById('adminProductList');
+      container.innerHTML = appData.products.map(p => `
+        <div class="admin-row">
+          <span><strong>${p.name}</strong></span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:0.8rem; color:var(--text-muted);">Lager:</span>
+            <input type="number" id="stock-input-${p.id}" value="${p.stock}" min="0">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function saveAdminStock() {
+      appData.products.forEach(p => {
+        const input = document.getElementById(`stock-input-${p.id}`);
+        if (input) {
+          p.stock = parseInt(input.value) || 0;
+        }
+      });
+
+      // In localStorage speichern, damit es auf dem Handy erhalten bleibt
+      const stockMap = {};
+      appData.products.forEach(p => { stockMap[p.id] = p.stock; });
+      localStorage.setItem('yomajo_live_stock', JSON.stringify(stockMap));
+
+      renderProducts();
+      alert("✓ Lagerbestand erfolgreich aktualisiert!");
+      toggleAdminPanel();
+    }
+
     function addToCart(productId) {
       const product = appData.products.find(p => p.id === productId);
       const existing = cart.find(item => item.id === productId);
+      const currentQty = existing ? existing.qty : 0;
+
+      if (currentQty + 1 > product.stock) {
+        alert(`Davon sind leider nur noch ${product.stock} Stück auf Lager!`);
+        return;
+      }
+
       if (existing) {
         existing.qty++;
       } else {
@@ -340,7 +436,12 @@
 
     function changeQty(productId, amount) {
       const item = cart.find(i => i.id === productId);
+      const product = appData.products.find(p => p.id === productId);
       if (item) {
+        if (amount > 0 && item.qty + amount > product.stock) {
+          alert(`Maximal ${product.stock} Stück auf Lager.`);
+          return;
+        }
         item.qty += amount;
         if (item.qty <= 0) {
           cart = cart.filter(i => i.id !== productId);
@@ -425,6 +526,11 @@
     }
 
     function sendOrder() {
+      if (checkoutCooldown) {
+        alert("Bitte warte kurz, bevor du die nächste Bestellung absendest (Spam-Schutz).");
+        return;
+      }
+
       if (cart.length === 0) {
         alert("Dein Warenkorb ist leer!");
         return;
@@ -436,6 +542,19 @@
         openAddressModal();
         return;
       }
+
+      // Lagerbestand automatisch beim Kauf abziehen
+      cart.forEach(cartItem => {
+        const prod = appData.products.find(p => p.id === cartItem.id);
+        if (prod) {
+          prod.stock = Math.max(0, prod.stock - cartItem.qty);
+        }
+      });
+
+      // Lagerbestand im localStorage aktualisieren
+      const stockMap = {};
+      appData.products.forEach(p => { stockMap[p.id] = p.stock; });
+      localStorage.setItem('yomajo_live_stock', JSON.stringify(stockMap));
 
       const addr = JSON.parse(savedAddress);
       const formattedAddress = `${addr.name}\n${addr.street}\n${addr.city}\nE-Mail: ${addr.email}`;
@@ -462,13 +581,32 @@
         discount_info: discountText
       };
 
+      // 30 Sekunden Cooldown aktivieren
+      checkoutCooldown = true;
+      const checkoutBtn = document.getElementById('checkoutBtn');
+      checkoutBtn.disabled = true;
+      
+      let timeLeft = 30;
+      const cooldownInterval = setInterval(() => {
+        checkoutBtn.textContent = `Bitte warten (${timeLeft}s)...`;
+        timeLeft--;
+        if (timeLeft < 0) {
+          clearInterval(cooldownInterval);
+          checkoutCooldown = false;
+          checkoutBtn.disabled = false;
+          checkoutBtn.textContent = "Kaufen";
+        }
+      }, 1000);
+
       emailjs.send('service_zkw0mul', 'template_mbesxlp', templateParams)
         .then(function(response) {
-           alert('Vielen Dank für Ihre Bestellung! Die Bestelldetails wurden per E-Mail gesendet.');
+           alert('Vielen Dank für deine Bestellung! Die Bestelldetails wurden gesendet.');
            cart = [];
            appliedDiscount = null;
            document.getElementById('discountInput').value = '';
            document.getElementById('discountMsg').textContent = '';
+           renderProducts();
+           renderAdminPanel();
            updateCartUI();
            toggleCart();
         }, function(error) {
@@ -476,7 +614,6 @@
         });
     }
 
-    // Initialize on page load
     loadShopData();
   </script>
 </body>
