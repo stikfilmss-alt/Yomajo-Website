@@ -271,12 +271,10 @@
         : availableProducts.filter(p => p.category === currentCategory);
 
       grid.innerHTML = filtered.map(p => {
-        // Build badge text with "bis DD.MM.YYYY" if expiresAt is set
         let badgeHtml = '';
         if (p.expiresAt) {
           const formattedDate = formatGermanDate(p.expiresAt);
-          const badgeLabel = p.badge ? `${p.badge} (bis ${formattedDate})` : `Nur bis ${formattedDate}`;
-          badgeHtml = `<span class="badge">${badgeLabel}</span>`;
+          badgeHtml = `<span class="badge">Limitiert (bis ${formattedDate})</span>`;
         } else if (p.badge) {
           badgeHtml = `<span class="badge">${p.badge}</span>`;
         }
@@ -311,7 +309,6 @@
       updateCartUI();
     }
 
-    // Change quantity or remove item from cart
     function changeQty(productId, amount) {
       const item = cart.find(i => i.id === productId);
       if (item) {
@@ -360,7 +357,6 @@
       document.getElementById('cartModal').classList.toggle('open');
     }
 
-    // Function to send order details via EmailJS
     function sendOrder() {
       if (cart.length === 0) {
         alert("Dein Warenkorb ist leer!");
