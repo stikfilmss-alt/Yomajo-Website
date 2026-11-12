@@ -55,6 +55,7 @@
     .admin-panel.open { display: block; }
     .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); gap: 10px; }
     .admin-row input { width: 80px; padding: 0.4rem; text-align: center; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; }
+    .admin-actions { display: flex; gap: 10px; margin-top: 1rem; }
 
     /* Category Filter */
     .categories { display: flex; justify-content: center; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; padding: 0 1rem; }
@@ -110,7 +111,7 @@
     .discount-msg.error { color: #d9534f; }
 
     .cart-footer { border-top: 1px solid var(--border); padding-top: 1rem; }
-    .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+    .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; }
     .checkout-btn:disabled { background: #ccc; cursor: not-allowed; }
     
     /* Address Modal Box */
@@ -156,7 +157,10 @@
     <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Lagerbestand verwalten (Frisch gedörrt?)</h3>
     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ändere hier die Stückzahlen und klicke auf Speichern. Die Website aktualisiert sich sofort.</p>
     <div id="adminProductList"></div>
-    <button class="save-btn" onclick="saveAdminStock()" style="margin-top: 1rem;">Lagerbestand speichern</button>
+    <div class="admin-actions">
+      <button class="save-btn" onclick="saveAdminStock()">Lagerbestand speichern</button>
+      <button class="save-btn" onclick="adminLogout()" style="background: #736965;">Abmelden</button>
+    </div>
   </div>
 
   <div class="categories" id="categoryContainer"></div>
@@ -211,7 +215,7 @@
           <span>Gesamtsumme:</span>
           <span id="cartTotal">0.00 €</span>
         </div>
-        <button class="checkout-btn" id="checkoutBtn" onclick="sendOrder()">Kaufen</button>
+        <button class="checkout-btn" id="checkoutBtn" onclick="sendOrder()" style="margin-top: 1rem;">Kaufen</button>
       </div>
     </div>
   </div>
@@ -387,23 +391,30 @@
       }).join('');
     }
 
-    // Admin Panel Steuerung mit Passwort "yumafrüchte"
+    // Admin Panel Steuerung mit dauerhaftem Login ("yumafrüchte")
     function toggleAdminPanel() {
       const panel = document.getElementById('adminPanel');
-      
-      if (panel.classList.contains('open')) {
-        panel.classList.remove('open');
-        return;
-      }
+      const isAdminLoggedIn = localStorage.getItem('yomajo_admin_auth') === 'true';
 
-      const adminPasswort = "yumafrüchte";
-      const eingabe = prompt("Bitte Admin-Passwort eingeben:");
+      if (!isAdminLoggedIn) {
+        const adminPasswort = "yumafrüchte";
+        const eingabe = prompt("Bitte Admin-Passwort eingeben:");
 
-      if (eingabe === adminPasswort) {
-        panel.classList.add('open');
-      } else if (eingabe !== null) {
-        alert("Falsches Passwort!");
+        if (eingabe === adminPasswort) {
+          localStorage.setItem('yomajo_admin_auth', 'true');
+          panel.classList.add('open');
+        } else if (eingabe !== null) {
+          alert("Falsches Passwort!");
+        }
+      } else {
+        panel.classList.toggle('open');
       }
+    }
+
+    function adminLogout() {
+      localStorage.removeItem('yomajo_admin_auth');
+      document.getElementById('adminPanel').classList.remove('open');
+      alert("Du hast dich als Admin abgemeldet.");
     }
 
     function renderAdminPanel() {
