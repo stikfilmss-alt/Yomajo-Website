@@ -241,9 +241,21 @@
 
     function renderProducts() {
       const grid = document.getElementById('productGrid');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Filter out expired limited products
+      const availableProducts = appData.products.filter(p => {
+        if (!p.expiresAt) return true;
+        const expDate = new Date(p.expiresAt);
+        expDate.setHours(23, 59, 59, 999);
+        return today <= expDate;
+      });
+
+      // Filter by selected category
       const filtered = currentCategory === 'all' 
-        ? appData.products 
-        : appData.products.filter(p => p.category === currentCategory);
+        ? availableProducts 
+        : availableProducts.filter(p => p.category === currentCategory);
 
       grid.innerHTML = filtered.map(p => `
         <div class="card">
