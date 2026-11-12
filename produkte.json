@@ -72,7 +72,8 @@
       "name": "Orangenchips",
       "category": "früchte",
       "price": 3.00,
-      "badge": "Neu",
+      "badge": "Limitiert",
+      "expiresAt": "2026-12-31",
       "image": "https://cocktail-society.de/wp-content/uploads/2022/12/Dried-Orange-slices-2-768x768.jpg",
       "description": "Richtig sauere Orangen scheiben."
     },
