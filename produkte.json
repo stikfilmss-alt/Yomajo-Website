@@ -16,7 +16,7 @@
   "categories": [
     { "id": "all", "label": "Alle Produkte" },
     { "id": "früchte", "label": "Gedörrte Chips" },
-    { "id": "toast", "label": "Zimttoasts" }
+    { "id": "toast", "label": "Zimttoasts" },
     { "id": "bundles", "label": "Bundles" }
   ],
   "products": [
@@ -128,7 +128,8 @@
       "price": 13.50,
       "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
-      "description": "Apfelchips, Apfelchips-Pulver, Apfelchips-Soße, Apfelchips-Mix."
+      "description": "Apfelchips, Apfelchips-Pulver, Apfelchips-Soße, Apfelchips-Mix.",
+      "bundleItems": ["1", "3", "4", "5"]
     },
     {
       "id": "13",
@@ -137,7 +138,8 @@
       "price": 11.00,
       "badge": "Bundle",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
-      "description": "Gemischte-Chips, Bananenchips, Erdbeeren-Crunchy, Erdbeerenchips."
+      "description": "Gemischte-Chips, Bananenchips, Erdbeeren-Crunchy, Erdbeerenchips.",
+      "bundleItems": ["8", "9", "10", "14"]
     },
     {
       "id": "14",
@@ -146,7 +148,7 @@
       "price": 3.00,
       "badge": "Hauptprodukt",
       "image": "https://2.bp.blogspot.com/_r5FivfH_Vhs/TDIk36oGlbI/AAAAAAAAAVw/VpXanYJVEtQ/s1600/P1090301.JPG",
-      "description": "Gemischte-Chips, Bananenchips, Erdbeeren-Crunchy, Erdbeerenchips."
+      "description": "Knusprig gedörrte Erdbeerscheiben."
     }
   ]
 }
