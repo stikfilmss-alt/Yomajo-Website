@@ -237,6 +237,32 @@
       "6512HDAGG744HDAHU": 50
     };
 
+    // Bundle-Logik: Berechnet den verfügbaren Bestand basierend auf den Komponenten
+    function getEffectiveStock(product) {
+      if (!product.bundleItems || product.bundleItems.length === 0) {
+        return product.stock !== undefined ? product.stock : 10;
+      }
+
+      const required = {};
+      product.bundleItems.forEach(entry => {
+        const id = typeof entry === 'object' ? String(entry.id) : String(entry);
+        const qty = typeof entry === 'object' ? (Number(entry.qty) || 1) : 1;
+        required[id] = (required[id] || 0) + qty;
+      });
+
+      let maxBundles = Infinity;
+      for (const id in required) {
+        const item = appData.products.find(p => String(p.id) === id);
+        const available = item && item.stock !== undefined ? item.stock : 0;
+        const possible = Math.floor(available / required[id]);
+        if (possible < maxBundles) {
+          maxBundles = possible;
+        }
+      }
+
+      return maxBundles === Infinity ? 0 : maxBundles;
+    }
+
     async function loadShopData() {
       try {
         const res = await fetch('produkte.json?t=' + Date.now());
@@ -372,7 +398,8 @@
         : availableProducts.filter(p => p.category === currentCategory);
 
       grid.innerHTML = filtered.map(p => {
-        const isSoldOut = p.stock <= 0;
+        const effectiveStock = getEffectiveStock(p);
+        const isSoldOut = effectiveStock <= 0;
 
         let badgeHtml = '';
         if (isSoldOut) {
@@ -387,10 +414,10 @@
         let stockInfoHtml = '';
         if (isSoldOut) {
           stockInfoHtml = `<div class="stock-tag empty">Nicht auf Lager (0 Stück)</div>`;
-        } else if (p.stock <= 5) {
-          stockInfoHtml = `<div class="stock-tag low">Auf Lager: nur noch ${p.stock} Stück</div>`;
+        } else if (effectiveStock <= 5) {
+          stockInfoHtml = `<div class="stock-tag low">Auf Lager: nur noch ${effectiveStock} Stück</div>`;
         } else {
-          stockInfoHtml = `<div class="stock-tag">Auf Lager: ${p.stock} Stück</div>`;
+          stockInfoHtml = `<div class="stock-tag">Auf Lager: ${effectiveStock} Stück</div>`;
         }
 
         return `
@@ -447,7 +474,10 @@
 
     function renderAdminPanel() {
       const container = document.getElementById('adminProductList');
-      container.innerHTML = appData.products.map(p => `
+      // Nur echte Einzelprodukte im Admin anzeigen (Bundles steuern sich über Komponenten)
+      const individualProducts = appData.products.filter(p => !p.bundleItems || p.bundleItems.length === 0);
+      
+      container.innerHTML = individualProducts.map(p => `
         <div class="admin-row">
           <span><strong>${p.name}</strong></span>
           <div style="display:flex; align-items:center; gap:8px;">
@@ -464,7 +494,9 @@
       saveBtn.textContent = "Speichert für alle...";
 
       const stockMap = {};
-      appData.products.forEach(p => {
+      const individualProducts = appData.products.filter(p => !p.bundleItems || p.bundleItems.length === 0);
+      
+      individualProducts.forEach(p => {
         const input = document.getElementById(`stock-input-${p.id}`);
         if (input) {
           p.stock = parseInt(input.value) || 0;
@@ -494,11 +526,12 @@
 
     function addToCart(productId) {
       const product = appData.products.find(p => p.id === productId);
+      const effectiveStock = getEffectiveStock(product);
       const existing = cart.find(item => item.id === productId);
       const currentQty = existing ? existing.qty : 0;
 
-      if (currentQty + 1 > product.stock) {
-        alert(`Davon sind leider nur noch ${product.stock} Stück auf Lager!`);
+      if (currentQty + 1 > effectiveStock) {
+        alert(`Davon sind leider nur noch ${effectiveStock} Stück verfügbar!`);
         return;
       }
 
@@ -513,9 +546,11 @@
     function changeQty(productId, amount) {
       const item = cart.find(i => i.id === productId);
       const product = appData.products.find(p => p.id === productId);
+      const effectiveStock = getEffectiveStock(product);
+      
       if (item) {
-        if (amount > 0 && item.qty + amount > product.stock) {
-          alert(`Maximal ${product.stock} Stück auf Lager.`);
+        if (amount > 0 && item.qty + amount > effectiveStock) {
+          alert(`Maximal ${effectiveStock} Stück verfügbar.`);
           return;
         }
         item.qty += amount;
@@ -619,11 +654,27 @@
         return;
       }
 
-      const boughtItems = cart.map(item => ({ id: item.id, qty: item.qty }));
+      // Wandelt Bundles in ihre einzelnen Produkt-Komponenten um für den Bestandsabzug
+      const boughtMap = {};
       cart.forEach(cartItem => {
-        const prod = appData.products.find(p => p.id === cartItem.id);
+        if (cartItem.bundleItems && cartItem.bundleItems.length > 0) {
+          cartItem.bundleItems.forEach(entry => {
+            const id = typeof entry === 'object' ? String(entry.id) : String(entry);
+            const qty = typeof entry === 'object' ? (Number(entry.qty) || 1) : 1;
+            boughtMap[id] = (boughtMap[id] || 0) + (qty * cartItem.qty);
+          });
+        } else {
+          boughtMap[cartItem.id] = (boughtMap[cartItem.id] || 0) + cartItem.qty;
+        }
+      });
+
+      const boughtItems = Object.keys(boughtMap).map(id => ({ id, qty: boughtMap[id] }));
+
+      // Lokal direkt abziehen für sofortige UI-Aktualisierung
+      boughtItems.forEach(b => {
+        const prod = appData.products.find(p => String(p.id) === String(b.id));
         if (prod) {
-          prod.stock = Math.max(0, prod.stock - cartItem.qty);
+          prod.stock = Math.max(0, prod.stock - b.qty);
         }
       });
 
