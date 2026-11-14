@@ -24,7 +24,7 @@
       "id": "1",
       "name": "Apfelchips",
       "category": "früchte",
-      "price": 100000000.00,
+      "price": 3.00,
       "badge": "Hauptprodukt",
       "image": "https://gesund.co.at/wp-content/uploads/2017/12/doerrapfel.jpg",
       "description": "Knusprige Bio-Apfelscheiben schonend ohne Zuckerzusatz gedörrt."
@@ -88,7 +88,7 @@
       "id": "8",
       "name": "Gemischte-Chips",
       "category": "früchte",
-      "price": 3.00,
+      "price": 4.00,
       "badge": "Hauptprodukt",
       "image": "https://tse2.mm.bing.net/th/id/OIP.Xxs7tTrzhbYIV9lK90JmdQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
       "description": "Das perfekte produkt für die, die Alles probieren wollen."
