@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yomajo</title>
   
-  <!-- EmailJS SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
      (function(){
@@ -31,7 +30,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: var(--bg); color: var(--text); line-height: 1.5; padding-bottom: 60px; }
 
-    /* Header & Nav */
     header { background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
     .nav-container { max-width: 1100px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
     .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
@@ -44,25 +42,21 @@
     .cart-btn:hover { background: var(--accent-hover); }
     .address-btn:hover { background: var(--tag-bg); }
 
-    /* Hero */
     .hero { max-width: 1100px; margin: 2rem auto; padding: 2rem 1.5rem; text-align: center; }
     .hero h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; color: var(--text); }
     .hero p { font-size: 1.1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 1.5rem auto; }
     .hero-badge { display: inline-block; background: var(--tag-bg); color: var(--accent); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.85rem; font-weight: 700; margin-bottom: 1rem; }
 
-    /* Admin Panel */
     .admin-panel { max-width: 800px; margin: 0 auto 2rem auto; background: var(--card-bg); border: 2px dashed var(--accent); border-radius: 16px; padding: 1.5rem; display: none; }
     .admin-panel.open { display: block; }
     .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); gap: 10px; }
     .admin-row input { width: 80px; padding: 0.4rem; text-align: center; border: 1px solid var(--border); border-radius: 6px; font-weight: bold; }
     .admin-actions { display: flex; gap: 10px; margin-top: 1rem; }
 
-    /* Category Filter */
     .categories { display: flex; justify-content: center; gap: 8px; margin-bottom: 2rem; flex-wrap: wrap; padding: 0 1rem; }
     .cat-btn { background: var(--card-bg); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 16px; font-weight: 500; cursor: pointer; transition: 0.2s; }
     .cat-btn.active, .cat-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
 
-    /* Product Grid */
     .grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; padding: 0 1.5rem; }
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
     .card.sold-out { opacity: 0.7; }
@@ -71,7 +65,6 @@
     .badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); color: var(--accent); padding: 0.25rem 0.65rem; border-radius: 8px; font-size: 0.75rem; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
     .badge.out { background: #2C2523; color: #FFFFFF; }
     
-    /* Lager-Anzeige unter jedem Produkt */
     .stock-tag { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.5rem; display: inline-block; padding: 0.15rem 0.5rem; border-radius: 6px; background: var(--tag-bg); color: var(--success); width: fit-content; }
     .stock-tag.low { color: var(--accent); background: #FCECE6; }
     .stock-tag.empty { color: #d9534f; background: #F9E5E5; }
@@ -85,11 +78,9 @@
     .add-btn:hover:not(:disabled) { background: var(--accent); color: white; border-color: var(--accent); }
     .add-btn:disabled { background: #EAEAEA; color: #999; cursor: not-allowed; border-color: #DDD; }
 
-    /* Modals */
     .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100; }
     .modal-overlay.open { display: flex; }
     
-    /* Cart Drawer */
     .cart-drawer-overlay { justify-content: flex-end; }
     .cart-drawer { background: var(--card-bg); width: 100%; max-width: 400px; height: 100%; padding: 1.5rem; display: flex; flex-direction: column; }
     .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
@@ -102,7 +93,6 @@
     .remove-item-btn { background: none; border: none; color: #d9534f; cursor: pointer; font-size: 0.85rem; font-weight: 600; }
     .remove-item-btn:hover { text-decoration: underline; }
 
-    /* Discount Section inside Cart */
     .discount-section { margin: 10px 0; display: flex; gap: 6px; }
     .discount-section input { flex: 1; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.85rem; text-transform: uppercase; }
     .discount-btn { background: var(--text); color: white; border: none; padding: 0 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
@@ -114,7 +104,6 @@
     .checkout-btn, .save-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.8rem; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; }
     .checkout-btn:disabled, .save-btn:disabled { background: #ccc; cursor: not-allowed; }
     
-    /* Address Modal Box */
     .address-box { background: var(--card-bg); width: 90%; max-width: 450px; border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
     .address-form input { width: 100%; padding: 0.75rem; margin-top: 0.5rem; margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
     .address-info-display { font-size: 0.85rem; background: var(--tag-bg); padding: 0.5rem 0.8rem; border-radius: 8px; margin-bottom: 0.5rem; color: var(--text-muted); }
@@ -152,7 +141,6 @@
     <p id="heroSubtitle"></p>
   </section>
 
-  <!-- Admin Panel zum Verwalten des Lagerbestands -->
   <div class="admin-panel" id="adminPanel">
     <h3 style="margin-bottom: 0.5rem; color: var(--accent);">Live-Lagerbestand verwalten (Frisch gedörrt?)</h3>
     <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Ändere hier die Stückzahlen und klicke auf Speichern. Alle Kunden sehen die neuen Zahlen sofort.</p>
@@ -167,7 +155,6 @@
 
   <main class="grid" id="productGrid"></main>
 
-  <!-- Address Modal -->
   <div class="modal-overlay" id="addressModal">
     <div class="address-box">
       <h2>Lieferadresse eingeben</h2>
@@ -191,7 +178,6 @@
     </div>
   </div>
 
-  <!-- Cart Drawer -->
   <div class="modal-overlay cart-drawer-overlay" id="cartModal">
     <div class="cart-drawer">
       <div class="cart-header">
@@ -204,7 +190,6 @@
           Lieferung an: <i>Noch keine Adresse angegeben</i>
         </div>
 
-        <!-- Rabattcode Eingabe -->
         <div class="discount-section">
           <input type="text" id="discountInput" placeholder="Gutscheincode">
           <button class="discount-btn" onclick="applyDiscount()">Einlösen</button>
@@ -221,7 +206,6 @@
   </div>
 
   <script>
-    // Eingetragene Google Apps Script Web-App URL
     const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbw1K3jTTH_KkXPIijcknTbDvI5SBLvy4fXnZdQB2VkjguyTBLdIKyf81OeGWmCPvpMV/exec";
 
     let appData = {};
@@ -237,7 +221,6 @@
       "6512HDAGG744HDAHU": 50
     };
 
-    // Bundle-Logik: Berechnet den verfügbaren Bestand basierend auf den Komponenten
     function getEffectiveStock(product) {
       if (!product.bundleItems || product.bundleItems.length === 0) {
         return product.stock !== undefined ? product.stock : 10;
@@ -280,7 +263,6 @@
         renderAdminPanel();
         checkCustomerAddress();
 
-        // Alle 10 Sekunden leise im Hintergrund den Live-Bestand von Google Sheets holen
         setInterval(async () => {
           const updated = await syncLiveStockFromGoogle();
           if (updated) {
@@ -442,7 +424,6 @@
       }).join('');
     }
 
-    // Admin Panel Steuerung mit dauerhaftem Login ("yumafrüchte")
     function toggleAdminPanel() {
       const panel = document.getElementById('adminPanel');
       const isAdminLoggedIn = localStorage.getItem('yomajo_admin_auth') === 'true';
@@ -474,7 +455,6 @@
 
     function renderAdminPanel() {
       const container = document.getElementById('adminProductList');
-      // Nur echte Einzelprodukte im Admin anzeigen (Bundles steuern sich über Komponenten)
       const individualProducts = appData.products.filter(p => !p.bundleItems || p.bundleItems.length === 0);
       
       container.innerHTML = individualProducts.map(p => `
@@ -654,7 +634,6 @@
         return;
       }
 
-      // Wandelt Bundles in ihre einzelnen Produkt-Komponenten um für den Bestandsabzug
       const boughtMap = {};
       cart.forEach(cartItem => {
         if (cartItem.bundleItems && cartItem.bundleItems.length > 0) {
@@ -670,7 +649,6 @@
 
       const boughtItems = Object.keys(boughtMap).map(id => ({ id, qty: boughtMap[id] }));
 
-      // Lokal direkt abziehen für sofortige UI-Aktualisierung
       boughtItems.forEach(b => {
         const prod = appData.products.find(p => String(p.id) === String(b.id));
         if (prod) {
@@ -740,11 +718,4 @@
            updateCartUI();
            toggleCart();
         }, function(error) {
-           alert('Fehler beim Senden: ' + JSON.stringify(error));
-        });
-    }
-
-    loadShopData();
-  </script>
-</body>
-</html>
+           alert('Fehler beim Senden: ' + JSON.st
